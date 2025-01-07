@@ -14,8 +14,12 @@ const startBtn = document.querySelector('#startBtn');
 // -----------------------------------------------------
 // VARIABLES DEL JUEGO
 // -----------------------------------------------------
-let ballSpeedX = 8;
-let ballSpeedY = 8;
+// Velocidades "base" iniciales (puedes ajustarlas si quieres)
+let initialBallSpeedX = 8;  // AÑADIDO: para referencia
+let initialBallSpeedY = 8;  // AÑADIDO: para referencia
+
+let ballSpeedX = initialBallSpeedX;
+let ballSpeedY = initialBallSpeedY;
 let ballPosX = game.offsetWidth / 2;
 let ballPosY = game.offsetHeight / 2;
 let paddleSpeed = 10;
@@ -26,10 +30,10 @@ let keysPressed = {};
 let isPaused = false;
 let isGameOver = false;
 let powerUpInterval;
-const winningScore = 3; // Puedes cambiarlo al número deseado
+const winningScore = 7; // Puedes cambiarlo al número deseado
 
 // -----------------------------------------------------
-// LISTA DE POWER-UPS
+// LISTA DE POWER-UPS (sin cambios)
 // -----------------------------------------------------
 const powerUps = [
   {
@@ -68,7 +72,7 @@ const powerUps = [
 ];
 
 // -----------------------------------------------------
-// MENÚ INICIAL
+// MENÚ INICIAL (sin cambios)
 // -----------------------------------------------------
 startBtn.addEventListener('click', () => {
   // Ocultar menú y mostrar el juego
@@ -112,6 +116,10 @@ function moveBall() {
     ballSpeedX *= -1;
     ballSpeedY = (impact - 0.5) * 12;
     ballPosX = player1.offsetWidth; // Corrige colisiones
+
+    // AÑADIDO: aumentar velocidad un 25% tras el rebote
+    ballSpeedX *= 1.25;
+    ballSpeedY *= 1.25;
   }
 
   // Rebote en paleta player2
@@ -124,18 +132,22 @@ function moveBall() {
     ballSpeedX *= -1;
     ballSpeedY = (impact - 0.5) * 12;
     ballPosX = game.offsetWidth - player2.offsetWidth - ball.offsetWidth; // Corrige colisiones
+
+    // AÑADIDO: aumentar velocidad un 10% tras el rebote
+    ballSpeedX *= 1.1;
+    ballSpeedY *= 1.1;
   }
 
   // Detectar goles
   if (ballPosX <= 0) {
     player2Score++;
     score2.textContent = player2Score;
-    resetGame();
+    resetGame(); // Se restablece la velocidad en resetGame()
   }
   if (ballPosX >= game.offsetWidth - ball.offsetWidth) {
     player1Score++;
     score1.textContent = player1Score;
-    resetGame();
+    resetGame(); // Se restablece la velocidad en resetGame()
   }
 
   // Verificar si alguien alcanzó la puntuación ganadora
@@ -147,7 +159,7 @@ function moveBall() {
 }
 
 // -----------------------------------------------------
-// VERIFICAR GANADOR
+// VERIFICAR GANADOR (sin cambios)
 // -----------------------------------------------------
 function checkWinner() {
   if (player1Score >= winningScore) {
@@ -158,7 +170,7 @@ function checkWinner() {
 }
 
 // -----------------------------------------------------
-// MOSTRAR MENSAJE DE VICTORIA
+// MOSTRAR MENSAJE DE VICTORIA (sin cambios)
 // -----------------------------------------------------
 function showWinner(message) {
   // Detener el juego
@@ -188,15 +200,18 @@ function resetGame() {
   // Si el juego ya terminó, no reseteamos más
   if (isGameOver) return;
 
-  ballPosX = game.offsetWidth / 2;
-  ballPosY = game.offsetHeight / 2;
-  // Velocidades aleatorias iniciales
+  // AÑADIDO: restablecer la velocidad a sus valores iniciales
+  // (o valores aleatorios, si prefieres la mecánica original).
   ballSpeedX = 6 * (Math.random() > 0.5 ? 1 : -1);
   ballSpeedY = 4 * (Math.random() > 0.5 ? 1 : -1);
+
+  // Centrar la pelota
+  ballPosX = game.offsetWidth / 2;
+  ballPosY = game.offsetHeight / 2;
 }
 
 // -----------------------------------------------------
-// MOVIMIENTO DE LAS PALETAS
+// MOVIMIENTO DE LAS PALETAS (sin cambios)
 // -----------------------------------------------------
 function movePaddles() {
   if (keysPressed["w"] && player1.offsetTop > 0) {
@@ -220,7 +235,7 @@ function movePaddles() {
 }
 
 // -----------------------------------------------------
-// EVENTOS DE TECLADO
+// EVENTOS DE TECLADO (sin cambios)
 // -----------------------------------------------------
 document.addEventListener("keydown", (e) => {
   keysPressed[e.key] = true;
@@ -241,7 +256,7 @@ document.addEventListener("keyup", (e) => {
 });
 
 // -----------------------------------------------------
-// GENERAR POWER-UPS ALEATORIOS
+// GENERAR POWER-UPS ALEATORIOS (sin cambios)
 // -----------------------------------------------------
 function spawnPowerUp() {
   if (isGameOver) return; // No generamos más power-ups si hay ganador
@@ -266,7 +281,7 @@ function spawnPowerUp() {
 }
 
 // -----------------------------------------------------
-// DETECTAR COLISIÓN CON POWER-UPS
+// DETECTAR COLISIÓN CON POWER-UPS (sin cambios)
 // -----------------------------------------------------
 function checkPowerUpCollision() {
   document.querySelectorAll(".power-up").forEach((powerUpElement) => {
@@ -291,7 +306,7 @@ function checkPowerUpCollision() {
 }
 
 // -----------------------------------------------------
-// BUCLE PRINCIPAL DEL JUEGO
+// BUCLE PRINCIPAL DEL JUEGO (sin cambios)
 // -----------------------------------------------------
 function gameLoop() {
   if (isPaused || isGameOver) return;
